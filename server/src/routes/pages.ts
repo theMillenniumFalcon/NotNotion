@@ -4,7 +4,7 @@ const pagesController = require("../controllers/pages")
 
 const router = _express.Router()
 
-// GET /pages
+// GET /api/pages
 router.get("/", isAuth, pagesController.getPages)
 
 module.exports = router

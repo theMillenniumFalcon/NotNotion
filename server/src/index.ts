@@ -1,9 +1,11 @@
-import 'dotenv-safe/config'
-import express from 'express'
-import bodyParser from 'body-parser'
-import cookieParser from 'cookie-parser'
+const dotenv = require("dotenv")
+dotenv.config()
+const express = require("express")
+const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
 
-import { connectDB } from './database/database-connection'
+const connectDB = require("./database/database-connection")
+const pagesRoutes = require("./routes/pages")
 
 const PORT = process.env.PORT
 
@@ -32,6 +34,8 @@ const main = async () => {
     app.get('/', (_, res) => {
         res.send("Server is working fine!")
     })
+
+    app.use("/api/pages", pagesRoutes)
 
     app.use(({ err, res }: any) => {
         console.log(err)

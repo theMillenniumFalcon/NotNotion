@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken")
 // in the authentication middleware. We have further authorization checks when
 // we load the page from the database.
 
-module.exports = (req: any, _res: any, next: any) => {
+module.exports = (req, res, next) => {
     const { token } = req.cookies
     if (token) {
         const { userId } = jwt.verify(token, process.env.JWT_KEY)

@@ -1,8 +1,8 @@
-import mongoose from "mongoose"
+const mongoose = require('mongoose')
 
 mongoose.set("strictQuery", false)
 const connectDB = async () => {
-    await mongoose.connect(process.env.DATABASE_URI)
+    mongoose.connect(process.env.DATABASE_URI)
     console.log('Database connected')
 }
 

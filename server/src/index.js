@@ -16,10 +16,10 @@ const main = async () => {
 
     app.set("trust proxy", 1)
 
-    app.use((_: any, res: any, next: any) => {
+    app.use((req, res, next) => {
         res.setHeader("Access-Control-Allow-Headers", "Content-Type")
         res.setHeader("Access-Control-Allow-Origin", process.env.CLIENT_URL)
-        res.setHeader("Access-Control-Allow-Credentials", true as any)
+        res.setHeader("Access-Control-Allow-Credentials", true)
         res.setHeader(
             "Access-Control-Allow-Methods",
             "GET, POST, OPTIONS, PUT, DELETE"
@@ -30,14 +30,14 @@ const main = async () => {
     app.use(express.json())
     app.use(cookieParser())
 
-    app.get('/', (_: any, res: any) => {
+    app.get('/', (req, res) => {
         res.send("Server is working fine!")
     })
 
     app.use("/api/pages", pagesRoutes)
     app.use("/api/users", usersRoutes)
 
-    app.use(({ err, res }: any) => {
+    app.use((err, res) => {
         console.log(err)
         const status = err.statusCode || 500
         const message = err.message

@@ -1,7 +1,7 @@
-const _mongoose = require("mongoose")
-const _Schema = _mongoose.Schema
+const mongoose = require("mongoose")
+const Schema = mongoose.Schema
 
-const userSchema = new _Schema(
+const userSchema = new Schema(
     {
         email: {
             type: String,
@@ -31,7 +31,7 @@ const userSchema = new _Schema(
         },
         pages: [
             {
-                type: _Schema.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Page",
             },
         ],
@@ -39,4 +39,4 @@ const userSchema = new _Schema(
     { timestamps: true }
 )
 
-module.exports = _mongoose.model("User", userSchema)
+module.exports = mongoose.model("User", userSchema)

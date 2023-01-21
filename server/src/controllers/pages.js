@@ -169,8 +169,23 @@ const deletePage = async (req, res, next) => {
     }
 }
 
+const postImage = (req, res, next) => {
+    if (req.file) {
+        const imageUrl = req.file.path
+        res.status(200).json({
+            message: "Image uploaded successfully!",
+            imageUrl: imageUrl,
+        })
+    } else {
+        const error = new Error("No image file provided.")
+        error.statusCode = 422
+        throw error
+    }
+}
+
 exports.getPages = getPages
 exports.getPage = getPage
 exports.postPage = postPage
 exports.putPage = putPage
 exports.deletePage = deletePage
+exports.postImage = postImage

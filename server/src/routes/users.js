@@ -1,10 +1,10 @@
-const __express = require("express")
+const express = require("express")
 const { body } = require("express-validator")
 
-const _isAuth = require("../middleware/isAuth")
+const isAuth = require("../middleware/isAuth")
 const usersController = require("../controllers/users")
 
-const _router = __express.Router()
+const router = express.Router()
 
 const emailValidator = body("email")
     .isEmail()
@@ -20,10 +20,10 @@ const nameValidator = body("name")
     .withMessage("Name is required.")
 
 // POST /api/users/signup
-_router.post(
+router.post(
     "/signup",
     [emailValidator, passwordValidator, nameValidator],
     usersController.signup
 )
 
-module.exports = _router
+module.exports = router

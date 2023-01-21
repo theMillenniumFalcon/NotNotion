@@ -61,5 +61,39 @@ const getPage = async (req, res, next) => {
     }
 }
 
+const postPage = async (req, res, next) => {
+    const userId = req.userId
+    const blocks = req.body.blocks
+    const page = new Page({
+        blocks: blocks,
+        creator: userId || null,
+    })
+    try {
+        const savedPage = await page.save()
+
+        // Update user collection too
+        if (userId) {
+            const user = await User.findById(userId)
+            if (!user) {
+                const err = new Error("Could not find user by id.")
+                err.statusCode = 404
+                throw err
+            }
+            user.pages.push(savedPage._id)
+            await user.save()
+        }
+
+        res.status(201).json({
+            message: "Created page successfully.",
+            pageId: savedPage._id.toString(),
+            blocks: blocks,
+            creator: userId || null,
+        })
+    } catch (err) {
+        next(err)
+    }
+}
+
 exports.getPages = getPages
 exports.getPage = getPage
+exports.postPage = postPage

@@ -88,6 +88,7 @@ const Layout = ({ children }) => {
                 </nav>
             </header>
             <main className={styles.content}>{children}</main>
+            <hr className={styles.hr} />
             <footer className={styles.footerBar}>
                 <div className={styles.name}>
                     Crafted by {' '}

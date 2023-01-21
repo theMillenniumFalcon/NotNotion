@@ -37,6 +37,14 @@
     justify-content: space-between;
 }
 
+.hr {
+    display: block;
+    width: $max-width;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid $tertiary;
+}
+
 .github {
     width: auto;
     height: auto;

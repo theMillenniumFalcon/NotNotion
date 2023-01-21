@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
+import Image from 'next/image'
 
 import { UserStateContext } from "../../context/UserContext"
 
@@ -53,7 +54,11 @@ const Layout = ({ children }) => {
                                 tabIndex="0"
                                 onClick={() => toggleContextMenu()}
                             >
-                                <img src={UserIcon} alt="User Icon" />
+                                <Image
+                                    src={UserIcon}
+                                    alt="User Icon"
+                                    priority
+                                />
                             </span>
                         </div>
                     )}
@@ -104,7 +109,11 @@ const Layout = ({ children }) => {
                         role="link"
                         tabIndex="0"
                     >
-                        <img src={GithubIcon} alt="Github Icon" />
+                        <Image
+                            src={GithubIcon}
+                            alt="Github Icon"
+                            priority
+                        />
                     </a>
                 </div>
             </footer>

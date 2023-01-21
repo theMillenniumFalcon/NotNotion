@@ -88,34 +88,36 @@ const Layout = ({ children }) => {
                 </nav>
             </header>
             <main className={styles.content}>{children}</main>
-            <hr className={styles.hr} />
             <footer className={styles.footerBar}>
-                <div className={styles.name}>
-                    Crafted by {' '}
-                    <a
-                        href="https://themillenniumfalcon.github.io"
-                        rel="noopener noreferrer"
-                        role="link"
-                        tabIndex="0"
-                    >
-                        <name>
-                            <strong>Nishank Priydarshi</strong>
-                        </name>
-                    </a>
-                </div>
-                <div className={styles.github}>
-                    <a
-                        href="https://github.com/theMillenniumFalcon/NotNotion"
-                        rel="noopener noreferrer"
-                        role="link"
-                        tabIndex="0"
-                    >
-                        <Image
-                            src={GithubIcon}
-                            alt="Github Icon"
-                            priority
-                        />
-                    </a>
+                <hr className={styles.hr} />
+                <div className={styles.footerInfo}>
+                    <div className={styles.name}>
+                        Crafted by {' '}
+                        <a
+                            href="https://themillenniumfalcon.github.io"
+                            rel="noopener noreferrer"
+                            role="link"
+                            tabIndex="0"
+                        >
+                            <name>
+                                <strong>Nishank Priydarshi</strong>
+                            </name>
+                        </a>
+                    </div>
+                    <div className={styles.github}>
+                        <a
+                            href="https://github.com/theMillenniumFalcon/NotNotion"
+                            rel="noopener noreferrer"
+                            role="link"
+                            tabIndex="0"
+                        >
+                            <Image
+                                src={GithubIcon}
+                                alt="Github Icon"
+                                priority
+                            />
+                        </a>
+                    </div>
                 </div>
             </footer>
         </div>

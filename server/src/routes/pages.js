@@ -16,4 +16,7 @@ router.post("/", isAuth, pagesController.postPage)
 // PUT /api/pages/{id}
 router.put("/:pageId", isAuth, pagesController.putPage)
 
+// DELETE /api/pages/{id}
+router.delete("/:pageId", isAuth, pagesController.deletePage)
+
 module.exports = router

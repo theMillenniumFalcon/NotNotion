@@ -26,7 +26,7 @@ const signup = async (req, res, next) => {
             throw err
         }
 
-        const existingUser = await User.findOne({ email: email });
+        const existingUser = await User.findOne({ email: email })
         if (existingUser) {
             const err = new Error("E-Mail address already exists.")
             err.statusCode = 422

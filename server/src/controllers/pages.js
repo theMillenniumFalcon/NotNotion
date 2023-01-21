@@ -31,4 +31,35 @@ const getPages = async (req, res, next) => {
     }
 }
 
+const getPage = async (req, res, next) => {
+    const userId = req.userId
+    const pageId = req.params.pageId
+
+    try {
+        const page = await Page.findById(pageId)
+        if (!page) {
+            const err = new Error("Could not find page by id.")
+            err.statusCode = 404
+            throw err
+        }
+
+        // Public pages have no creator, they can be accessed by anybody
+        // For private pages, creator and logged-in user have to be the same
+        const creatorId = page.creator ? page.creator.toString() : null
+        if ((creatorId && creatorId === userId) || !creatorId) {
+            res.status(200).json({
+                message: "Fetched page successfully.",
+                page: page,
+            })
+        } else {
+            const err = new Error("User is not authenticated.")
+            err.statusCode = 401
+            throw err
+        }
+    } catch (err) {
+        next(err)
+    }
+}
+
 exports.getPages = getPages
+exports.getPage = getPage

@@ -84,7 +84,19 @@ const Layout = ({ children }) => {
             </header>
             <main className={styles.content}>{children}</main>
             <footer className={styles.footerBar}>
-                <hr className={styles.hr} />
+                <div className={styles.name}>
+                    Crafted by {' '}
+                    <a
+                        href="https://themillenniumfalcon.github.io"
+                        rel="noopener noreferrer"
+                        role="link"
+                        tabIndex="0"
+                    >
+                        <name>
+                            <strong>Nishank Priydarshi</strong>
+                        </name>
+                    </a>
+                </div>
                 <div className={styles.github}>
                     <a
                         href="https://github.com/theMillenniumFalcon/NotNotion"

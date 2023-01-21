@@ -124,6 +124,31 @@ const logout = (req, res, next) => {
     })
 }
 
+const getUser = async (req, res, next) => {
+    const userId = req.userId
+
+    try {
+        const user = await User.findById(userId)
+
+        if (!userId || !user) {
+            const err = new Error("User is not authenticated.")
+            err.statusCode = 401
+            throw err
+        }
+
+        res.status(200).json({
+            message: "User successfully fetched.",
+            userId: user._id.toString(),
+            email: user.email,
+            name: user.name,
+            pages: user.pages,
+        })
+    } catch (err) {
+        next(err)
+    }
+}
+
 exports.signup = signup
 exports.login = login
 exports.logout = logout
+exports.getUser = getUser

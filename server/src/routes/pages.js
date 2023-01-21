@@ -13,4 +13,7 @@ router.get("/:pageId", isAuth, pagesController.getPage)
 // POST /api/pages
 router.post("/", isAuth, pagesController.postPage)
 
+// PUT /api/pages/{id}
+router.put("/:pageId", isAuth, pagesController.putPage)
+
 module.exports = router

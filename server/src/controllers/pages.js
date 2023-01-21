@@ -94,6 +94,41 @@ const postPage = async (req, res, next) => {
     }
 }
 
+const putPage = async (req, res, next) => {
+    const userId = req.userId
+    const pageId = req.params.pageId
+    const blocks = req.body.blocks
+
+    try {
+        const page = await Page.findById(pageId)
+
+        if (!page) {
+            const err = new Error("Could not find page by id.")
+            err.statusCode = 404
+            throw err
+        }
+
+        // Public pages have no creator, they can be updated by anybody
+        // For private pages, creator and logged-in user have to be the same
+        const creatorId = page.creator ? page.creator.toString() : null
+        if ((creatorId && creatorId === userId) || !creatorId) {
+            page.blocks = blocks
+            const savedPage = await page.save()
+            res.status(200).json({
+                message: "Updated page successfully.",
+                page: savedPage,
+            })
+        } else {
+            const err = new Error("User is not authenticated.")
+            err.statusCode = 401
+            throw err
+        }
+    } catch (err) {
+        next(err)
+    }
+}
+
 exports.getPages = getPages
 exports.getPage = getPage
 exports.postPage = postPage
+exports.putPage = putPage

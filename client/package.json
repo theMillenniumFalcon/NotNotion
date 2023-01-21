@@ -12,6 +12,9 @@
     "@next/font": "13.1.4",
     "next": "13.1.4",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "sass": "^1.57.1",
+    "typeface-nunito-sans": "^1.1.13",
+    "typeface-roboto": "^1.1.13"
   }
 }

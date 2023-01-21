@@ -38,7 +38,7 @@ const ForgotPasswordPage = () => {
         setNotice(RESET_NOTICE)
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API}/users/resetToken`,
+                `${process.env.NEXT_PUBLIC_API}/api/users/resetToken`,
                 {
                     method: "POST",
                     credentials: "include",

@@ -53,7 +53,7 @@ const LoginPage = () => {
         setNotice(RESET_NOTICE)
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API}/users/login`,
+                `${process.env.NEXT_PUBLIC_API}/api/users/login`,
                 {
                     method: "POST",
                     credentials: "include",

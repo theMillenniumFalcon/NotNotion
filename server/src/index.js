@@ -7,7 +7,7 @@ const connectDB = require("./database/database-connection")
 const pagesRoutes = require("./routes/pages")
 const usersRoutes = require("./routes/users")
 
-const PORT = process.env.PORT
+const PORT = parseInt(process.env.PORT) || 4000
 
 const main = async () => {
     await connectDB()

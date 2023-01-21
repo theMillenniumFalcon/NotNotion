@@ -26,4 +26,11 @@ router.post(
     usersController.signup
 )
 
+// POST /api/users/login
+router.post(
+    "/login",
+    [emailValidator, passwordValidator],
+    usersController.login
+)
+
 module.exports = router

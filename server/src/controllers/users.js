@@ -8,11 +8,6 @@ const User = require("../models/user")
 
 const signup = async (req, res, next) => {
     try {
-        // if (req?.body?.email !== undefined) {
-        //     res.send("I have something")
-        // } else {
-        //     res.send("Nothing here...")
-        // }
         const email = req.body.email
         const password = req.body.password
         const name = req.body.name
@@ -64,4 +59,54 @@ const signup = async (req, res, next) => {
     }
 }
 
+const login = async (req, res, next) => {
+    try {
+        const email = req.body.email
+        const password = req.body.password
+
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            const err = new Error("Input validation failed.")
+            err.statusCode = 422
+            err.data = errors.array()
+            throw err
+        }
+
+        const user = await User.findOne({ email: email })
+        if (!user) {
+            const err = new Error("An user with this email could not be found.")
+            err.statusCode = 404
+            throw err
+        }
+
+        const isEqual = await bcrypt.compare(password, user.password)
+        if (!isEqual) {
+            const err = new Error("Wrong password.")
+            err.statusCode = 401
+            throw err
+        }
+
+        const token = jwt.sign(
+            { userId: user._id.toString() },
+            process.env.JWT_KEY
+        )
+
+        const maxAge = 1000 * 60 * 60 // 1 hour
+        res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: maxAge,
+            domain: process.env.DOMAIN,
+        })
+
+        res.status(201).json({
+            message: "User successfully logged in.",
+            token: token,
+            userId: user._id.toString(),
+        })
+    } catch (err) {
+        next(err)
+    }
+}
+
 exports.signup = signup
+exports.login = login

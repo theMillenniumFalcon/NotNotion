@@ -39,4 +39,7 @@ router.post("/logout", isAuth, usersController.logout)
 // GET /api/users/account
 router.get("/account", isAuth, usersController.getUser)
 
+// PUT /api/users/account
+router.put("/account", isAuth, usersController.updateUser)
+
 module.exports = router

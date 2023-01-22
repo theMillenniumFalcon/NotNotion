@@ -1,3 +1,6 @@
+const fs = require("fs")
+const path = require("path")
+
 const Page = require("../models/page")
 const User = require("../models/user")
 
@@ -156,6 +159,15 @@ const deletePage = async (req, res, next) => {
                 await user.save()
             }
 
+            // Delete images folder too (if exists)
+            const dir = `src/images/${pageId}`
+            fs.access(dir, (err) => {
+                // If there is no error, the folder does exist
+                if (!err && dir !== "src/images/") {
+                    fs.rmdirSync(dir, { recursive: true })
+                }
+            })
+
             res.status(200).json({
                 message: "Deleted page successfully.",
             })
@@ -187,7 +199,7 @@ const deleteImage = (req, res, next) => {
     const imageName = req.params.imageName
     if (imageName) {
         const imagePath = `src/images/${imageName}`
-        clearImage(imagePath);
+        clearImage(imagePath)
         res.status(200).json({
             message: "Deleted image successfully.",
         })

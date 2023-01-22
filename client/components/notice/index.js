@@ -1,4 +1,5 @@
 import { useState } from "react"
+import Image from 'next/image'
 
 import styles from "./styles.module.scss"
 import CloseIcon from "../../images/close.svg"
@@ -24,7 +25,11 @@ const Notice = ({ children, status, mini, dismissible, style }) => {
                     className={styles.dismiss}
                     onClick={() => setIsVisible(false)}
                 >
-                    <img src={CloseIcon} alt="close icon" />
+                    <Image
+                        src={CloseIcon}
+                        alt="close icon"
+                        priority
+                    />
                 </span>
             )}
             {children}

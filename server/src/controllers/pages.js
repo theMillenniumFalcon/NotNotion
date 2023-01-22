@@ -183,9 +183,30 @@ const postImage = (req, res, next) => {
     }
 }
 
+const deleteImage = (req, res, next) => {
+    const imageName = req.params.imageName
+    if (imageName) {
+        const imagePath = `src/images/${imageName}`
+        clearImage(imagePath);
+        res.status(200).json({
+            message: "Deleted image successfully.",
+        })
+    } else {
+        const error = new Error("No imageName provided.")
+        error.statusCode = 422
+        throw error
+    }
+}
+
+const clearImage = (filePath) => {
+    filePath = path.join(__dirname, "..", filePath)
+    fs.unlink(filePath, (err) => console.log(err))
+}
+
 exports.getPages = getPages
 exports.getPage = getPage
 exports.postPage = postPage
 exports.putPage = putPage
 exports.deletePage = deletePage
 exports.postImage = postImage
+exports.deleteImage = deleteImage

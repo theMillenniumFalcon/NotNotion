@@ -22,4 +22,7 @@ router.delete("/:pageId", isAuth, pagesController.deletePage)
 // POST /api/pages/images
 router.post("/images", pagesController.postImage)
 
+// DELETE /api/pages/images/{name}
+router.delete("/images/:imageName", pagesController.deleteImage)
+
 module.exports = router

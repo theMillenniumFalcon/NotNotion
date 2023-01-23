@@ -29,12 +29,10 @@ const signup = async (req, res, next) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12)
-        const activationToken = (await promisify(randomBytes)(20)).toString("hex")
         const user = new User({
             email: email,
             password: hashedPassword,
             name: name,
-            activationToken: activationToken,
         })
         const savedUser = await user.save()
 

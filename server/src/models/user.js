@@ -15,20 +15,6 @@ const userSchema = new Schema(
             type: String,
             required: true,
         },
-        active: {
-            type: Boolean,
-            required: true,
-            default: false,
-        },
-        activationToken: {
-            type: String,
-        },
-        resetToken: {
-            type: String,
-        },
-        resetTokenExpiry: {
-            type: Number,
-        },
         pages: [
             {
                 type: Schema.Types.ObjectId,

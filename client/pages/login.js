@@ -27,11 +27,7 @@ const form = {
     submitButton: {
         type: "submit",
         label: "Login",
-    },
-    button: {
-        type: "button",
-        label: "Forgot password ?",
-    },
+    }
 }
 
 const LoginPage = () => {
@@ -78,11 +74,6 @@ const LoginPage = () => {
         }
     }
 
-    const handlePasswordReset = (e) => {
-        e.preventDefault()
-        router.push("/forgotPassword")
-    }
-
     return (
         <>
             <h1 className="pageHeading">Login</h1>
@@ -107,9 +98,6 @@ const LoginPage = () => {
                     </Notice>
                 )}
                 <button type={form.submitButton.type}>{form.submitButton.label}</button>
-                <button type={form.button.type} onClick={handlePasswordReset}>
-                    {form.button.label}
-                </button>
             </form>
             <p>
                 Don't have an account yet?{" "}

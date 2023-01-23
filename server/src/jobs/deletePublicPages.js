@@ -3,7 +3,7 @@ const Page = require("../models/page")
 // A public page is a page that was created by a guest user. To avoid
 // massive database storage usage, we delete them after 24 hours.
 
-const ONE_DAY = 1000 * 60 * 60 * 24
+const ONE_DAY = 1000 * 60 * 60 * 24 // 24 hours
 
 const deletePublicPages = async () => {
     console.log(`Starting job: ${deletePublicPages.name}`)

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
+import { useRouter } from "next/router"
 
 import EditableBlock from "../editableBlock"
 import Notice from "../notice"
@@ -9,6 +10,14 @@ const EditablePage = ({
     // fetchedBlocks, 
     err
 }) => {
+    if (err) {
+        return (
+            <Notice status="ERROR">
+                <h3>Something went wrong 💔</h3>
+                <p>Have you tried to restart the app at '/' ?</p>
+            </Notice>
+        )
+    }
 
     const fetchedBlocks = [
         {
@@ -31,11 +40,13 @@ const EditablePage = ({
         }
     ]
 
+    const router = useRouter()
     const [blocks, setBlocks] = useState(fetchedBlocks)
+    const [currentBlockId, setCurrentBlockId] = useState(null)
 
     const onDragEndHandler = () => { }
 
-    const isNewPublicPage = true
+    const isNewPublicPage = router.query.public === "true"
     return (
         <>
             {isNewPublicPage && (

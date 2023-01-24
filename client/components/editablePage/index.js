@@ -1,16 +1,34 @@
-import React, { useState } from 'react'
-import { DragDropContext, Droppable } from "react-beautiful-dnd"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
+import { DragDropContext, Droppable } from "react-beautiful-dnd"
 
 import EditableBlock from "../editableBlock"
 import Notice from "../notice"
 import { usePrevious } from "../../hooks"
+import { objectId, setCaretToEnd } from "../../utils"
 
-const EditablePage = ({
-    id,
-    // fetchedBlocks,
-    err
-}) => {
+// A page is represented by an array containing several blocks
+// [
+//   {
+//     _id: "5f54d75b114c6d176d7e9765",
+//     html: "Heading",
+//     tag: "h1",
+//     imageUrl: "",
+//   },
+//   {
+//     _id: "5f54d75b114c6d176d7e9766",
+//     html: "I am a <strong>paragraph</strong>",
+//     tag: "p",
+//     imageUrl: "",
+//   },
+//     _id: "5f54d75b114c6d176d7e9767",
+//     html: "/im",
+//     tag: "img",
+//     imageUrl: "images/test.png",
+//   }
+// ]
+
+const EditablePage = ({ id, fetchedBlocks, err }) => {
     if (err) {
         return (
             <Notice status="ERROR">
@@ -20,26 +38,26 @@ const EditablePage = ({
         )
     }
 
-    const fetchedBlocks = [
-        {
-            _id: "5f54d75b114c6d176d7e9765",
-            html: "Heading",
-            tag: "h1",
-            imageUrl: "",
-        },
-        {
-            _id: "5f54d75b114c6d176d7e9766",
-            html: "I am a <strong>paragraph</strong>",
-            tag: "p",
-            imageUrl: "",
-        },
-        {
-            _id: "5f54d75b114c6d176d7e9767",
-            html: "random_3",
-            tag: "img",
-            imageUrl: "images/test.png",
-        }
-    ]
+    // const fetchedBlocks = [
+    //     {
+    //         _id: "5f54d75b114c6d176d7e9765",
+    //         html: "Heading",
+    //         tag: "h1",
+    //         imageUrl: "",
+    //     },
+    //     {
+    //         _id: "5f54d75b114c6d176d7e9766",
+    //         html: "I am a <strong>paragraph</strong>",
+    //         tag: "p",
+    //         imageUrl: "",
+    //     },
+    //     {
+    //         _id: "5f54d75b114c6d176d7e9767",
+    //         html: "random_3",
+    //         tag: "img",
+    //         imageUrl: "",
+    //     }
+    // ]
 
     const router = useRouter()
     const [blocks, setBlocks] = useState(fetchedBlocks)
@@ -47,19 +65,90 @@ const EditablePage = ({
 
     const prevBlocks = usePrevious(blocks)
 
-    const onDragEndHandler = (result) => {
-        const { destination, source } = result
-
-        // If we don't have a destination (due to dropping outside the droppable)
-        // or the destination hasn't changed, we change nothing
-        if (!destination || destination.index === source.index) {
-            return
+    // Update the database whenever blocks change
+    useEffect(() => {
+        const updatePageOnServer = async (blocks) => {
+            try {
+                await fetch(`${process.env.NEXT_PUBLIC_API}/api/pages/${id}`, {
+                    method: "PUT",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        blocks: blocks,
+                    }),
+                })
+            } catch (err) {
+                console.log(err)
+            }
         }
+        if (prevBlocks && prevBlocks !== blocks) {
+            updatePageOnServer(blocks)
+        }
+    }, [blocks, prevBlocks])
 
+    // Handling the cursor and focus on adding and deleting blocks
+    useEffect(() => {
+        // If a new block was added, move the caret to it
+        if (prevBlocks && prevBlocks.length + 1 === blocks.length) {
+            const nextBlockPosition =
+                blocks.map((b) => b._id).indexOf(currentBlockId) + 1 + 1
+            const nextBlock = document.querySelector(
+                `[data-position="${nextBlockPosition}"]`
+            )
+            if (nextBlock) {
+                nextBlock.focus()
+            }
+        }
+        // If a block was deleted, move the caret to the end of the last block
+        if (prevBlocks && prevBlocks.length - 1 === blocks.length) {
+            const lastBlockPosition = prevBlocks
+                .map((b) => b._id)
+                .indexOf(currentBlockId)
+            const lastBlock = document.querySelector(
+                `[data-position="${lastBlockPosition}"]`
+            )
+            if (lastBlock) {
+                setCaretToEnd(lastBlock)
+            }
+        }
+    }, [blocks, prevBlocks, currentBlockId])
+
+    const deleteImageOnServer = async (imageUrl) => {
+        // The imageUrl contains images/name.jpg, hence we do not need
+        // to explicitly add the /images endpoint in the API url
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API}/pages/${imageUrl}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+            await response.json()
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const updateBlockHandler = (currentBlock) => {
+        const index = blocks.map((b) => b._id).indexOf(currentBlock.id)
+        const oldBlock = blocks[index]
         const updatedBlocks = [...blocks]
-        const removedBlocks = updatedBlocks.splice(source.index - 1, 1)
-        updatedBlocks.splice(destination.index - 1, 0, removedBlocks[0])
+        updatedBlocks[index] = {
+            ...updatedBlocks[index],
+            tag: currentBlock.tag,
+            html: currentBlock.html,
+            imageUrl: currentBlock.imageUrl,
+        }
         setBlocks(updatedBlocks)
+        // If the image has been changed, we have to delete the
+        // old image file on the server
+        if (oldBlock.imageUrl && oldBlock.imageUrl !== currentBlock.imageUrl) {
+            deleteImageOnServer(oldBlock.imageUrl)
+        }
     }
 
     const addBlockHandler = (currentBlock) => {
@@ -88,47 +177,24 @@ const EditablePage = ({
             // If the deleted block was an image block, we have to delete
             // the image file on the server
             if (deletedBlock.tag === "img" && deletedBlock.imageUrl) {
-                deleteImageOnServer(deletedBlock.imageUrl);
+                deleteImageOnServer(deletedBlock.imageUrl)
             }
         }
     }
 
-    const updateBlockHandler = (currentBlock) => {
-        const index = blocks.map((b) => b._id).indexOf(currentBlock.id)
-        const oldBlock = blocks[index]
-        const updatedBlocks = [...blocks]
-        updatedBlocks[index] = {
-            ...updatedBlocks[index],
-            tag: currentBlock.tag,
-            html: currentBlock.html,
-            imageUrl: currentBlock.imageUrl,
-        }
-        setBlocks(updatedBlocks)
-        // If the image has been changed, we have to delete the
-        // old image file on the server
-        if (oldBlock.imageUrl && oldBlock.imageUrl !== currentBlock.imageUrl) {
-            deleteImageOnServer(oldBlock.imageUrl)
-        }
-    }
+    const onDragEndHandler = (result) => {
+        const { destination, source } = result
 
-    const deleteImageOnServer = async (imageUrl) => {
-        // The imageUrl contains images/name.jpg, hence we do not need
-        // to explicitly add the /images endpoint in the API url
-        try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API}/api/pages/${imageUrl}`,
-                {
-                    method: "DELETE",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                    },
-                }
-            )
-            await response.json()
-        } catch (err) {
-            console.log(err)
+        // If we don't have a destination (due to dropping outside the droppable)
+        // or the destination hasn't changed, we change nothing
+        if (!destination || destination.index === source.index) {
+            return
         }
+
+        const updatedBlocks = [...blocks]
+        const removedBlocks = updatedBlocks.splice(source.index - 1, 1)
+        updatedBlocks.splice(destination.index - 1, 0, removedBlocks[0])
+        setBlocks(updatedBlocks)
     }
 
     const isNewPublicPage = router.query.public === "true"
@@ -145,7 +211,8 @@ const EditablePage = ({
                     {(provided) => (
                         <div ref={provided.innerRef} {...provided.droppableProps}>
                             {blocks.map((block) => {
-                                const position = blocks.map((b) => b._id).indexOf(block._id) + 1
+                                const position =
+                                    blocks.map((b) => b._id).indexOf(block._id) + 1
                                 return (
                                     <EditableBlock
                                         key={block._id}

@@ -1,14 +1,16 @@
 {
-  "name": "server",
+  "name": "notion-clone-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
+  "engines": {
+    "node": "12.x"
   },
-  "keywords": [],
-  "author": "",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": ""
+  },
+  "author": "Konstantin Münster",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

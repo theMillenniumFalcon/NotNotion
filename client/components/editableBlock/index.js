@@ -1,3 +1,4 @@
+import React from 'react'
 import ContentEditable from "react-contenteditable"
 import { Draggable } from "react-beautiful-dnd"
 

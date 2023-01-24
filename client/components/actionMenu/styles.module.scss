@@ -29,29 +29,31 @@
   font-family: $accent;
   font-weight: 700;
   border-right: 1px solid $secondary;
+
   img {
-      width: 100%;
-      height: 100%;
-      max-width: 1rem;
-      max-height: 1.125rem;
+    width: 100%;
+    height: 100%;
+    max-width: 1rem;
+    max-height: 1.125rem;
   }
 }
 
 .menuItem:last-of-type {
-    border-right: none;
+  border-right: none;
 }
 
 .menuItem:hover {
-    background: $tertiary;
-    cursor: pointer;
+  background: $tertiary;
+  cursor: pointer;
 }
 
 .menuItem:first-of-type:hover {
-    border-top-left-radius: .5rem;
-    border-bottom-left-radius: .5rem;
+  border-top-left-radius: .5rem;
+  border-bottom-left-radius: .5rem;
+  cursor: not-allowed ! important;
 }
 
 .menuItem:last-of-type:hover {
-    border-top-right-radius: .5rem;
-    border-bottom-right-radius: .5rem;
+  border-top-right-radius: .5rem;
+  border-bottom-right-radius: .5rem;
 }

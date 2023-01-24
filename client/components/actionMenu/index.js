@@ -22,7 +22,7 @@ const ActionMenu = ({ position, actions }) => {
           className={styles.menuItem}
           role="button"
           tabIndex="0"
-          onClick={() => actions.turnInto()}
+        // onClick={() => actions.turnInto()}
         >
           Turn into
         </span>

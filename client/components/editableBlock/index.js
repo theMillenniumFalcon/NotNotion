@@ -358,7 +358,7 @@ class EditableBlock extends React.Component {
             position={this.state.actionMenuPosition}
             actions={{
               deleteBlock: () => this.props.deleteBlock({ id: this.props.id }),
-              turnInto: () => this.openTagSelectorMenu("ACTION_MENU"),
+              // turnInto: () => this.openTagSelectorMenu("ACTION_MENU"),
             }}
           />
         )}

@@ -23,6 +23,12 @@ The credit for the original idea and implementation goes to [Konstantin Münster
 - **User Management** (Create an account to create private pages)
 - **Scheduled Jobs** (Delete inactive pages and accounts automatically)
 
+## Checklist
+
+- [x] <s>developing a MVP</s>
+- [ ] making the turn into feature work directly from the action menu
+- [ ] adding checkbox and toggle components
+
 ## Config / Secrets environment variables
 
 Copy `.env.example` from the server and client folders to `.env` and `.env.local` repectively and add your private information

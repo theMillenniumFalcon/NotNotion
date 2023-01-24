@@ -1,6 +1,5 @@
 const mongoose = require("mongoose")
 
-const deleteInactiveUsers = require("./deleteInactiveUsers")
 const deletePublicPages = require("./deletePublicPages")
 
 const executeJobs = async () => {
@@ -14,7 +13,6 @@ const executeJobs = async () => {
       console.log("SUCCESS - Database connected.")
 
       // Running jobs
-      await deleteInactiveUsers()
       await deletePublicPages()
 
       process.exit()

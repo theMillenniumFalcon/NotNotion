@@ -21,6 +21,10 @@ const MyApp = ({ Component, pageProps, isAuthenticated }) => {
 MyApp.getInitialProps = async (context) => {
   let isAuthenticated = false
 
+  // WARNING - We only check if a cookie called token is present
+  // We do not verify the token on the server at this point
+  // In this case, it might be fine since we only need the auth state
+  // for UI purposes. Any sensitive data fetch is secured separately
   const { token } = cookies(context.ctx)
   if (token) {
     isAuthenticated = true

@@ -22,7 +22,7 @@ const fileStorage = multer.diskStorage({
         err.statusCode = 422
         throw err
       }
-      const dir = `src/images/${pageId}`
+      const dir = `images/${pageId}`
       fs.access(dir, (err) => {
         if (err) {
           return fs.mkdir(dir, (err) => cb(err, dir))
